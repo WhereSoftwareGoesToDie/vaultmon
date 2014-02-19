@@ -19,17 +19,14 @@ data Sources = Sources {
 }
 
 data ChateauStats = ChateauStats { burstsPerSecond    :: Int
-                                 , bytesPerSecond     :: Int
-                                 , averageMessageSize :: Int }
+                                 , bytesPerSecond     :: Int }
 
 instance ToJSON ChateauStats where
     toJSON ChateauStats{..} =
       let kb   = 1024 :: Double
-          kbps = (fromIntegral bytesPerSecond) / kb
-          ams  = (fromIntegral averageMessageSize) / kb in
+          kbps = (fromIntegral bytesPerSecond) / kb in
         object [ "DataBursts per second" .= burstsPerSecond
-               , "Kilobytes per second"  .= kbps
-               , "Average message size"  .= ams ]
+               , "Kilobytes per second"  .= kbps ]
 
 linkThread :: IO a -> IO ()
 linkThread = (link =<<) . async
@@ -72,14 +69,11 @@ gatherChateau stream = do
         let lengths = map B.length ps
 
         let stats = ChateauStats { burstsPerSecond = length ps
-                                 , bytesPerSecond = sum lengths
-                                 , averageMessageSize = average lengths }
+                                 , bytesPerSecond = sum lengths }
 
         writeChan stream $ encode stats
         waitTick
   where
-    average [] = 0
-    average xs = sum xs `div` length xs
     runSnoop packets = do
         ZMQ.runZMQ $ do
             snoop <- ZMQ.socket ZMQ.Sub
