@@ -1,0 +1,28 @@
+name:           vaultmon
+version:        0.0.1
+license:        BSD3
+license-file:   LICENSE
+author:         Christian Marie <christian@ponies.io>
+maintainer:     Christian Marie
+description:    A monitoring daemon for vaultaire that provides a websocket for combined telemetries.
+synopsis:       A Haskell implementation of the xxHash algorithm
+category:       None
+build-type:     Simple
+cabal-version:  >= 1.10
+source-repository head
+  type: git
+  location: https://github.com/anchor/vaultmon
+
+executable             vaultmon
+  type:                exitcode-stdio-1.0
+  build-depends:       base >=4.6 && <4.7,
+                       optparse-applicative,
+                       websockets,
+                       zeromq4-haskell,
+                       bytestring,
+                       aeson,
+                       async
+  ghc-options:         -threaded
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  default-language:    Haskell2010
