@@ -23,10 +23,10 @@ data ChateauStats = ChateauStats { burstsPerSecond    :: Int
 
 instance ToJSON ChateauStats where
     toJSON ChateauStats{..} =
-      let kb   = 1024 :: Double
-          kbps = (fromIntegral bytesPerSecond) / kb in
+      let mbit   = 131072 :: Double
+          mbitps = (fromIntegral bytesPerSecond) / mbit in
         object [ "DataBursts per second" .= burstsPerSecond
-               , "Kilobytes per second"  .= kbps ]
+               , "Megabits per second"   .= mbitps ]
 
 linkThread :: IO a -> IO ()
 linkThread = (link =<<) . async
